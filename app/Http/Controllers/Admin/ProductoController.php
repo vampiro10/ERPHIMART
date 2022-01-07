@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Prestashop;
+use Protechstudio\PrestashopWebService\PrestashopWebService;
+use Protechstudio\PrestashopWebService\PrestaShopWebserviceException;
 
 class ProductoController extends Controller
 {
@@ -37,25 +39,28 @@ class ProductoController extends Controller
 
             foreach($arrayStock['stock_availables']['stock_available'] as $item => $valor) {
 
-                if($value['id'] == $valor['id_product']) {
+                //foreach($arrayCateg['categories']['category'] as $ind => $valCateg) {
 
-                    $tablaProdu[] = ['id'          => $value['id'],
-                                     'name'        => $value['name']['language'],
-                                     'stock'       => $valor['quantity'],
-                                     'reference'   => $value['reference'],
-                                     //'category'    => $tablaCateg['category'], 
-                                     'price'       => $value['price'],
-                                     'state'       => $value['state'],
-                                     'activo'      => $value['active'],
-                                    ];
-                }                
+                    if($value['id'] == $valor['id_product']) {
+
+                        $tablaProdu[] = ['id'          => $value['id'],
+                                        'name'        => $value['name']['language'],
+                                        'stock'       => $valor['quantity'],
+                                        'reference'   => $value['reference'],
+                                        //'category'    => $valCateg['name']['language'], 
+                                        'price'       => $value['price'],
+                                        'state'       => $value['state'],
+                                        'activo'      => $value['active'],
+                                        ];
+                    } 
+                //}      
             }                              
         }
 
         //pasamos los parametros a otro arreglo para poder usarlos en el Front
         $parametros = ['productos' => $tablaProdu,];
 
-        //dd($tablaProdu);
+        //dd($j[0]['id']);
 
         return view('admin.productos.index', compact('parametros'));
     }
@@ -112,7 +117,15 @@ class ProductoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        /*try{
+
+            $urlProdu['resource'] = 'products/'+$id+'?sort=[id_ASC]&display=full'; //pasamos los parametros por url de la apí
+            $xmlProdu = Prestashop::get($urlProdu);
+            
+
+        }catch(PrestaShopWebserviceException $e) {
+            echo 'Error' . $e->getMessage();
+        }*/
     }
 
     /**

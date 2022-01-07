@@ -1,4 +1,5 @@
 @extends('admin.layout.layout')
+
 @section('title')
 <h1 class="m-0 text-dark">Productos</h1>
 @endsection
@@ -57,8 +58,22 @@
                                     <td>{{ $val['stock'] }}</td>
                       
                                     <td>$ {{ number_format($val['price'], 2) }}</td>
-                                    <td>Opciones</td>
-                            </tr>
+
+                                    <td>
+                                        {{--<a href="editar" data-id="{{ $val['id'] }}" class="icon-pencil" data-toggle="tooltip" data-placement="top" data-original-title="Editar"> <i class="mdi mdi-pencil"></i></a>
+                                        <a href="eliminar" data-id="{{ $val['id'] }}" class="icon-trash" data-toggle="tooltip" data-placement="top" data-original-title="Eliminar"> <i class="mdi mdi-delete"></i></a>--}}
+                                        @if($val['activo'] != 1)
+                                            <div class="custom-control custom-switch">
+                                                <input type="checkbox" class="custom-control-input" id="customSwitch1">
+                                                <label class="custom-control-label" for="customSwitch1"></label>
+                                            </div>
+                                        @else
+                                            <div class="custom-control custom-switch">
+                                                <input class="custom-control-input" type="checkbox" id="customSwitch1" checked>
+                                                <label class="custom-control-label" for="customSwitch1"></label>
+                                            </div>
+                                        @endif
+                                    </td>
                                 @endif
                             @endforeach
                           
