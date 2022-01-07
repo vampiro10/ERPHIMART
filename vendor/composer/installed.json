@@ -3210,6 +3210,60 @@
             "install-path": "../phpunit/phpunit"
         },
         {
+            "name": "protechstudio/laravel-prestashop-webservice",
+            "version": "3.5.0",
+            "version_normalized": "3.5.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Silentscripter/laravel-prestashop-webservice.git",
+                "reference": "cfff73998d6e1311b57e51fe11b74bd205719879"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Silentscripter/laravel-prestashop-webservice/zipball/cfff73998d6e1311b57e51fe11b74bd205719879",
+                "reference": "cfff73998d6e1311b57e51fe11b74bd205719879",
+                "shasum": ""
+            },
+            "require-dev": {
+                "orchestra/testbench": "^3.5",
+                "squizlabs/php_codesniffer": "^3.2"
+            },
+            "time": "2019-05-19T20:59:27+00:00",
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Protechstudio\\PrestashopWebService\\PrestashopWebServiceProvider"
+                    ],
+                    "aliases": {
+                        "Prestashop": "Protechstudio\\PrestashopWebService\\PrestashopWebServiceFacade"
+                    }
+                }
+            },
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "Protechstudio\\PrestashopWebService\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Vito Laera",
+                    "email": "vito.laera@protechstudio.it"
+                }
+            ],
+            "description": "Laravel 5 wrapper for Prestashop Web Service Library",
+            "support": {
+                "issues": "https://github.com/Silentscripter/laravel-prestashop-webservice/issues",
+                "source": "https://github.com/Silentscripter/laravel-prestashop-webservice/tree/master"
+            },
+            "install-path": "../protechstudio/laravel-prestashop-webservice"
+        },
+        {
             "name": "psr/container",
             "version": "1.1.2",
             "version_normalized": "1.1.2.0",

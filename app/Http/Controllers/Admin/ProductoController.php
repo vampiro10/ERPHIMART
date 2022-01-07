@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Prestashop;
 
 class ProductoController extends Controller
 {
@@ -14,7 +15,49 @@ class ProductoController extends Controller
      */
     public function index()
     {
-        return view('admin.productos.index');
+        $urlProdu['resource'] = 'products/?sort=[id_ASC]&display=full'; //pasamos los parametros por url de la apí
+        $xmlProdu = Prestashop::get($urlProdu); //llama los parametros por GET
+
+        $urlStock['resource'] = 'stock_availables/?sort=[id_ASC]&display=full';
+        $xmlStock = Prestashop::get($urlStock);
+
+        $urlCateg['resource'] = 'categories/?sort=[id_ASC]&display=full';
+        $xmlCateg = Prestashop::get($urlCateg);
+
+        $jsonProdu = json_encode($xmlProdu);    //codificamos el xml de la api en json
+        $arrayProdu = json_decode($jsonProdu, true);  //decodificamos el json anterior para poder manipularlos
+
+        $jsonStock = json_encode($xmlStock);
+        $arrayStock = json_decode($jsonStock, true);
+
+        $jsonCateg = json_encode($xmlCateg);
+        $arrayCateg = json_decode($jsonCateg, true);
+
+        foreach($arrayProdu['products']['product'] as $key => $value) {
+
+            foreach($arrayStock['stock_availables']['stock_available'] as $item => $valor) {
+
+                if($value['id'] == $valor['id_product']) {
+
+                    $tablaProdu[] = ['id'          => $value['id'],
+                                     'name'        => $value['name']['language'],
+                                     'stock'       => $valor['quantity'],
+                                     'reference'   => $value['reference'],
+                                     //'category'    => $tablaCateg['category'], 
+                                     'price'       => $value['price'],
+                                     'state'       => $value['state'],
+                                     'activo'      => $value['active'],
+                                    ];
+                }                
+            }                              
+        }
+
+        //pasamos los parametros a otro arreglo para poder usarlos en el Front
+        $parametros = ['productos' => $tablaProdu,];
+
+        //dd($tablaProdu);
+
+        return view('admin.productos.index', compact('parametros'));
     }
 
     /**

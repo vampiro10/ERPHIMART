@@ -26,29 +26,41 @@
                     <table id="table_id" class="table table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <th class="text-center">ID</th>
                                 <th>Nombre</th>
-                                <th>Tipo de <br>Producto</th>
+                                <th>SKU</th>
                                 <th>Codigo</th>
                                 <th>Categoria</th>
-                                <th>Medida</th>
+                                <th>Stock</th>
                       
-                                <th>Precio <br> de venta</th>
+                                <th>Precio <br>de venta</th>
                                 <th>Opciones</th>
                             </tr>
                         </thead>
                         <tbody>
+                            
+                            @foreach($parametros['productos'] as $ke => $val)
+
                             <tr>
-                                <td>ID</td>
-                                <td>Nombre</td>
-                                <td>Tipo de <br>Producto</td>
-                                <td>Codigo</td>
-                                <td>Categoria</td>
-                                <td>Medida</td>
+                                @if ($val['state'] == "0")
+
+                                @else
+                                    <td class="text-center">{{ $val['id'] }}</td>
+                                    <td>{{ $val['name'] }}</td>
+                                    <td>SKU</td>
+                                    @if ($val['reference'] == [])
+                                        <td>Ref. vacío</td>
+                                    @else
+                                        <td>{{ $val['reference'] }}</td>
+                                    @endif
+                                    <td>Categoria</td>
+                                    <td>{{ $val['stock'] }}</td>
                       
-                                <td>Precio <br> de venta</td>
-                                <td>Opciones</td>
+                                    <td>$ {{ number_format($val['price'], 2) }}</td>
+                                    <td>Opciones</td>
                             </tr>
+                                @endif
+                            @endforeach
                           
                         </tbody>
                     </table>

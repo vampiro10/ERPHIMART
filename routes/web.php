@@ -14,7 +14,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::get('home', 'Admin\HomeController@index')->name('home');
+Route::get('/', 'Admin\HomeController@index')->name('home');
+
+//Route::get('home', 'Admin\HomeController@index')->name('home');   // cargar el Dasboard después de haber iniciado sesión
 
 //Rutas de Catalogo Productos
 Route::resource('admin/productos','Admin\ProductoController')->parameters(['productos'=>'productos'])->names('admin.productos');
