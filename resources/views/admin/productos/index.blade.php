@@ -43,9 +43,7 @@
                             @foreach($parametros['productos'] as $ke => $val)
 
                             <tr>
-                                @if ($val['state'] == "0")
-
-                                @else
+                                @if ($val['state'] != "0")
                                     <td class="text-center">{{ $val['id'] }}</td>
                                     <td>{{ $val['name'] }}</td>
                                     <td>SKU</td>

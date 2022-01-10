@@ -39,21 +39,18 @@ class ProductoController extends Controller
 
             foreach($arrayStock['stock_availables']['stock_available'] as $item => $valor) {
 
-                //foreach($arrayCateg['categories']['category'] as $ind => $valCateg) {
+                if($value['id'] == $valor['id_product']) {
 
-                    if($value['id'] == $valor['id_product']) {
-
-                        $tablaProdu[] = ['id'          => $value['id'],
-                                        'name'        => $value['name']['language'],
-                                        'stock'       => $valor['quantity'],
-                                        'reference'   => $value['reference'],
-                                        //'category'    => $valCateg['name']['language'], 
-                                        'price'       => $value['price'],
-                                        'state'       => $value['state'],
-                                        'activo'      => $value['active'],
-                                        ];
-                    } 
-                //}      
+                    $tablaProdu[] = ['id'          => $value['id'],
+                                    'name'        => $value['name']['language'],
+                                    'stock'       => $valor['quantity'],
+                                    'reference'   => $value['reference'],
+                                    //'category'    => $valCateg['name']['language'], 
+                                    'price'       => $value['price'],
+                                    'state'       => $value['state'],
+                                    'activo'      => $value['active'],
+                                    ];
+                }   
             }                              
         }
 
