@@ -64,7 +64,7 @@ class ProductoController extends Controller
         //pasamos los parametros a otro arreglo para poder usarlos en el Front
         $parametros = ['productos' => $tablaProdu,];
 
-        dd($tab);
+        //dd($tab);
 
         return view('admin.productos.index', compact('parametros'));
     }
