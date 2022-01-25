@@ -23,7 +23,7 @@ class ProductoController extends Controller
         $urlStock['resource'] = 'stock_availables/?sort=[id_ASC]&display=full';
         $xmlStock = Prestashop::get($urlStock);
 
-        $urlCateg['resource'] = 'categories/?sort=[id_ASC]&display=full';
+        $urlCateg['resource'] = 'categories/?sort=[id_ASC]&display=[products[id]]';
         $xmlCateg = Prestashop::get($urlCateg);
 
         $jsonProdu = json_encode($xmlProdu);    //codificamos el xml de la api en json
@@ -35,11 +35,10 @@ class ProductoController extends Controller
         $jsonCateg = json_encode($xmlCateg);
         $arrayCateg = json_decode($jsonCateg, true);
 
-        foreach($arrayCateg as $index) {
-            
-            $hipo = $index["category"]; 
+        foreach($arrayCateg["categories"]["category"] as $index => $categ) {
+            $categorias[] = $categ;
         }
-
+        
         foreach($arrayProdu['products']['product'] as $key => $value) {
 
             foreach($arrayStock['stock_availables']['stock_available'] as $item => $valor) {
@@ -62,7 +61,7 @@ class ProductoController extends Controller
         //pasamos los parametros a otro arreglo para poder usarlos en el Front
         $parametros = ['productos' => $tablaProdu,];
 
-        //dd($hipo);
+        dd($arrayCateg);
 
         return view('admin.productos.index', compact('parametros'));
     }
