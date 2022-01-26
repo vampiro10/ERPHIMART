@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Prestashop;
-use Protechstudio\PrestashopWebService\PrestashopWebService;
-use Protechstudio\PrestashopWebService\PrestaShopWebserviceException;
+/*use Protechstudio\PrestashopWebService\PrestashopWebService;
+use Protechstudio\PrestashopWebService\PrestaShopWebserviceException;*/
 
 class ProductoController extends Controller
 {
@@ -23,7 +23,7 @@ class ProductoController extends Controller
         $urlStock['resource'] = 'stock_availables/?sort=[id_ASC]&display=full';
         $xmlStock = Prestashop::get($urlStock);
 
-        $urlCateg['resource'] = 'categories/?sort=[id_ASC]&display=[name,products[id]]';
+        $urlCateg['resource'] = 'categories/?sort=[id_ASC]&display=[id,name,products[id]]';
         $xmlCateg = Prestashop::get($urlCateg);
 
         $jsonProdu = json_encode($xmlProdu);    //codificamos el xml de la api en json
@@ -36,35 +36,31 @@ class ProductoController extends Controller
         $arrayCateg = json_decode($jsonCateg, true);
 
         foreach($arrayCateg["categories"]["category"] as $index => $categ) {
-        // $products[] = $categ["associations"]["products"];
-            foreach($categ["associations"]["products"] as $product) {
-                $tab[] = $product;
-            }
-        }
         
-        foreach($arrayProdu['products']['product'] as $key => $value) {
+            foreach($arrayProdu['products']['product'] as $key => $value) {
 
-            foreach($arrayStock['stock_availables']['stock_available'] as $item => $valor) {
+                foreach($arrayStock['stock_availables']['stock_available'] as $item => $valor) {
 
-                if($value['id'] == $valor['id_product']) {
+                    if($value['id'] == $valor['id_product'] && $value['id_category_default'] == $categ['id']) {
 
-                    $tablaProdu[] = ['id'          => $value['id'],
-                                    'name'        => $value['name']['language'],
-                                    'stock'       => $valor['quantity'],
-                                    'reference'   => $value['reference'],
-                                    //'category'    => $valCateg['name']['language'], 
-                                    'price'       => $value['price'],
-                                    'state'       => $value['state'],
-                                    'activo'      => $value['active'],
-                                    ];
-                }   
-            }                              
+                        $tablaProdu[] = ['id'          => $value['id'],
+                                        'name'        => $value['name']['language'],
+                                        'stock'       => $valor['quantity'],
+                                        'reference'   => $value['reference'],
+                                        'category'    => $categ['name']['language'], 
+                                        'price'       => $value['price'],
+                                        'state'       => $value['state'],
+                                        'activo'      => $value['active'],
+                                        ];
+                    }   
+                }                              
+            }
         }
 
         //pasamos los parametros a otro arreglo para poder usarlos en el Front
         $parametros = ['productos' => $tablaProdu,];
 
-        //dd($tab);
+        //dd($tablaProdu);
 
         return view('admin.productos.index', compact('parametros'));
     }

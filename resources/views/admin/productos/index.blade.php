@@ -52,7 +52,7 @@
                                     @else
                                         <td>{{ $val['reference'] }}</td>
                                     @endif
-                                    <td>Categoria</td>
+                                    <td>{{ $val['category'] }}</td>
                                     <td>{{ $val['stock'] }}</td>
                       
                                     <td>$ {{ number_format($val['price'], 2) }}</td>
