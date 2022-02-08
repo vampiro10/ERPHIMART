@@ -3,6 +3,9 @@
 @section('title')
 <h1 class="m-0 text-dark">Productos</h1>
 @endsection
+@section('css')
+    <link rel="stylesheet" href="/css_custom.css">
+@endsection
 @section('content-header')
 <ol class="breadcrumb float-sm-right">
     <li class="breadcrumb-item"><a href="{{route('home')}}">Inicio</a></li>
@@ -27,6 +30,7 @@
                     <table id="table_id" class="table table-bordered table-striped">
                         <thead>
                             <tr>
+                                {{--<th>Imagen</th>--}}
                                 <th class="text-center">ID</th>
                                 <th>Nombre</th>
                                 <th>SKU</th>
@@ -44,6 +48,7 @@
 
                             <tr>
                                 @if ($val['state'] != "0")
+                                    {{--<td>imagen</td>--}}
                                     <td class="text-center">{{ $val['id'] }}</td>
                                     <td>{{ $val['name'] }}</td>
                                     <td>SKU</td>
@@ -58,9 +63,9 @@
                                     <td>$ {{ number_format($val['price'], 2) }}</td>
 
                                     <td>
-                                        {{--<a href="editar" data-id="{{ $val['id'] }}" class="icon-pencil" data-toggle="tooltip" data-placement="top" data-original-title="Editar"> <i class="mdi mdi-pencil"></i></a>
-                                        <a href="eliminar" data-id="{{ $val['id'] }}" class="icon-trash" data-toggle="tooltip" data-placement="top" data-original-title="Eliminar"> <i class="mdi mdi-delete"></i></a>--}}
-                                        @if($val['activo'] != 1)
+                                        <a href="editar" data-id="{{ $val['id'] }}" class="icon-pencil" data-toggle="tooltip" data-placement="top" data-original-title="Editar"> <i class="mdi mdi-pencil"></i></a>
+                                        <a href="eliminar" data-id="{{ $val['id'] }}" class="icon-trash" data-toggle="tooltip" data-placement="top" data-original-title="Eliminar"> <i class="mdi mdi-delete"></i></a>
+                                       {{-- @if($val['activo'] != 1)
                                             <div class="custom-control custom-switch">
                                                 <input type="checkbox" class="custom-control-input" id="customSwitch1">
                                                 <label class="custom-control-label" for="customSwitch1"></label>
@@ -70,7 +75,7 @@
                                                 <input class="custom-control-input" type="checkbox" id="customSwitch1" checked>
                                                 <label class="custom-control-label" for="customSwitch1"></label>
                                             </div>
-                                        @endif
+                                        @endif --}}
                                     </td>
                                 @endif
                             @endforeach

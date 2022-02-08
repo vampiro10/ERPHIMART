@@ -4,9 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Prestashop;
-/*use Protechstudio\PrestashopWebService\PrestashopWebService;
-use Protechstudio\PrestashopWebService\PrestaShopWebserviceException;*/
+use Protechstudio\PrestashopWebService\PrestashopWebService;
+use Protechstudio\PrestashopWebService\PrestaShopWebserviceException;
 
 class ProductoController extends Controller
 {
@@ -20,10 +21,10 @@ class ProductoController extends Controller
         $urlProdu['resource'] = 'products/?sort=[id_ASC]&display=full'; //pasamos los parametros por url de la apí
         $xmlProdu = Prestashop::get($urlProdu); //llama los parametros por GET
 
-        $urlStock['resource'] = 'stock_availables/?sort=[id_ASC]&display=full';
+        $urlStock['resource'] = 'stock_availables/?display=full';
         $xmlStock = Prestashop::get($urlStock);
 
-        $urlCateg['resource'] = 'categories/?sort=[id_ASC]&display=[id,name,products[id]]';
+        $urlCateg['resource'] = 'categories/?display=[id,name]';
         $xmlCateg = Prestashop::get($urlCateg);
 
         $jsonProdu = json_encode($xmlProdu);    //codificamos el xml de la api en json
@@ -56,11 +57,11 @@ class ProductoController extends Controller
                 }                              
             }
         }
-
+        $ordenarTabla = Arr::sort($tablaProdu);
         //pasamos los parametros a otro arreglo para poder usarlos en el Front
-        $parametros = ['productos' => $tablaProdu,];
+        $parametros = ['productos' => $ordenarTabla,];
 
-        //dd($tablaProdu);
+         //dd($xmlProdu);
 
         return view('admin.productos.index', compact('parametros'));
     }
@@ -68,11 +69,27 @@ class ProductoController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @ return \Illuminate\Http\Response
      */
+
     public function create()
     {
         //
+        $urlCateg['resource'] = 'categories/?sort=[id_ASC]&display=[id,name]';
+        $xmlCateg = Prestashop::get($urlCateg);
+
+        $jsonCateg = json_encode($xmlCateg);
+        $arrayCateg = json_decode($jsonCateg, true);
+
+        foreach($arrayCateg["categories"]["category"] as $categorias) {
+            
+            $tablaCategorias[] = ['id'    => $categorias['id'],
+                                  'nombre'=> $categorias['name']['language'],];
+        }
+
+        $parametros = ['categorias' => $tablaCategorias];
+
+        return view('admin.productos.create', compact('parametros'));
     }
 
     /**
@@ -83,7 +100,44 @@ class ProductoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $nombre = request('nombre');
+        $referencia = request('codigo');
+        $catg = request('categoria_id');
+        $activo = request('activo');
+        $precio = request('sinIVA');
+
+        if($activo == null) {
+            $activo = 0;
+        }
+        else {
+            $activo = 1;
+        }
+
+        //creamos el acceso al webservices
+        $xmlSchema = Prestashop::getSchema('products');
+        
+        $datos = ['id_manufacturer'         => 0,
+                  'id_supplier'             => 0,  
+                  'id_category_default'     => $catg,
+                  //'id_default_image'      => $imagen,
+                  'id_default_combination'  => 0,
+                  'reference'               => $referencia,
+                  'additional_delivery_times'=> 1,
+                  'name'                    => $nombre,
+                  'minimal_quantity'        => 1,
+                  'is_virtual'              => 0,
+                  'price'                   => $precio,
+                  'active'                  => $activo
+                ];
+
+        $pstXml = Prestashop::fillSchema($xmlSchema, $datos);
+        
+        dd($pstXml);  
+        
+        //$agregar = Prestashop::add(['resource' => 'products', 'postXml' => $pstXml->asXml()]);
+
+        //dd($agregar);
+       
     }
 
     /**
