@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+Auth::routes();
 
 Route::get('/', 'Admin\HomeController@index')->name('home');
 
@@ -20,3 +20,6 @@ Route::get('/', 'Admin\HomeController@index')->name('home');
 
 //Rutas de Catalogo Productos
 Route::resource('admin/productos','Admin\ProductoController')->parameters(['productos'=>'productos'])->names('admin.productos');
+
+
+Route::get('/home', 'HomeController@index')->name('home');

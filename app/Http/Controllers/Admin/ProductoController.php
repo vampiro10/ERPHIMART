@@ -5,12 +5,19 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\View;
 use Prestashop;
 use Protechstudio\PrestashopWebService\PrestashopWebService;
 use Protechstudio\PrestashopWebService\PrestaShopWebserviceException;
 
 class ProductoController extends Controller
 {
+    public function __construct()
+    {
+        // $this->middleware('auth');
+        
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -18,6 +25,7 @@ class ProductoController extends Controller
      */
     public function index()
     {
+
         $urlProdu['resource'] = 'products/?sort=[id_ASC]&display=full'; //pasamos los parametros por url de la apí
         $xmlProdu = Prestashop::get($urlProdu); //llama los parametros por GET
 
@@ -44,7 +52,7 @@ class ProductoController extends Controller
 
                     if($value['id'] == $valor['id_product'] && $value['id_category_default'] == $categ['id']) {
 
-                        $tablaProdu[] = ['id'          => $value['id'],
+                        $tablaProdu[] = ['id'         => $value['id'],
                                         'name'        => $value['name']['language'],
                                         'stock'       => $valor['quantity'],
                                         'reference'   => $value['reference'],
@@ -52,6 +60,7 @@ class ProductoController extends Controller
                                         'price'       => $value['price'],
                                         'state'       => $value['state'],
                                         'activo'      => $value['active'],
+                                        'date_upd'    => $value['date_upd'],
                                         ];
                     }   
                 }                              
@@ -64,6 +73,8 @@ class ProductoController extends Controller
          //dd($xmlProdu);
 
         return view('admin.productos.index', compact('parametros'));
+
+        
     }
 
     /**
@@ -103,8 +114,12 @@ class ProductoController extends Controller
         $nombre = request('nombre');
         $referencia = request('codigo');
         $catg = request('categoria_id');
+        $cantidad = request('cantidad');
         $activo = request('activo');
         $precio = request('sinIVA');
+        $description_short = request('resumen');
+        $description = request('descripcion');
+
 
         if($activo == null) {
             $activo = 0;
@@ -119,7 +134,6 @@ class ProductoController extends Controller
         $datos = ['id_manufacturer'         => 0,
                   'id_supplier'             => 0,  
                   'id_category_default'     => $catg,
-                  //'id_default_image'      => $imagen,
                   'id_default_combination'  => 0,
                   'reference'               => $referencia,
                   'additional_delivery_times'=> 1,
@@ -127,16 +141,21 @@ class ProductoController extends Controller
                   'minimal_quantity'        => 1,
                   'is_virtual'              => 0,
                   'price'                   => $precio,
-                  'active'                  => $activo
+                  'description_short'       => $description_short,
+                  'description'             => $description,
+                  'active'                  => $activo,
+                  'state'                   => 1
                 ];
-
+        
         $pstXml = Prestashop::fillSchema($xmlSchema, $datos);
         
-        dd($pstXml);  
+        // dd($pstXml);  
         
-        //$agregar = Prestashop::add(['resource' => 'products', 'postXml' => $pstXml->asXml()]);
+        $agregar = Prestashop::add(['resource' => 'products', 'postXml' => $pstXml->asXml()]);
 
-        //dd($agregar);
+        //$id = $agregar->product->id;
+        //set_product_quantity(35,$id,);
+        // dd($agregar);
        
     }
 
