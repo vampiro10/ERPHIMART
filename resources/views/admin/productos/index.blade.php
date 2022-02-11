@@ -30,15 +30,12 @@
                     <table id="table_id" class="table table-bordered table-striped">
                         <thead>
                             <tr>
-                                {{--<th>Imagen</th>--}}
-                                <th class="text-center">ID</th>
                                 <th>Nombre</th>
                                 <th>SKU</th>
-                                <th>Codigo</th>
                                 <th>Categoria</th>
                                 <th>Stock</th>
-                      
-                                <th>Precio <br>de venta</th>
+                                <th>Precio de venta</th>
+                                <th>Fecha</th>
                                 <th>Opciones</th>
                             </tr>
                         </thead>
@@ -48,10 +45,7 @@
 
                             <tr>
                                 @if ($val['state'] != "0")
-                                    {{--<td>imagen</td>--}}
-                                    <td class="text-center">{{ $val['id'] }}</td>
                                     <td>{{ $val['name'] }}</td>
-                                    <td>SKU</td>
                                     @if ($val['reference'] == [])
                                         <td>Ref. vacío</td>
                                     @else
@@ -61,7 +55,7 @@
                                     <td>{{ $val['stock'] }}</td>
                       
                                     <td>$ {{ number_format($val['price'], 2) }}</td>
-
+                                    <td>{{ $val['date_upd'] }}</td>
                                     <td>
                                         <a href="editar" data-id="{{ $val['id'] }}" class="icon-pencil" data-toggle="tooltip" data-placement="top" data-original-title="Editar"> <i class="mdi mdi-pencil"></i></a>
                                         <a href="eliminar" data-id="{{ $val['id'] }}" class="icon-trash" data-toggle="tooltip" data-placement="top" data-original-title="Eliminar"> <i class="mdi mdi-delete"></i></a>
